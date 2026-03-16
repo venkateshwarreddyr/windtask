@@ -1,4 +1,4 @@
-# windtask
+# posts-browser
 
 React app for browsing posts, users, and comments. Built with React 17, React Router 6, and Tailwind CSS.
 
