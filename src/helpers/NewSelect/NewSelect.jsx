@@ -11,7 +11,7 @@ const NewSelect = ({
 }) => {
   return (
     <>
-    <input onChange={onchange} value={value} />
+    <input onChange={onChange} value={value} />
       {/* <Typeahead
         id="basic-typeahead-example"
         labelKey={labelKey}

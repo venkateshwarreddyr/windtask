@@ -18,7 +18,7 @@ const SearchUser = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    history.push(`/user/${value[0].value}`);
+    history(`/user/${value[0].value}`);
     setValue([]);
   };
 
