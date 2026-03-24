@@ -1,29 +1,17 @@
-import * as config from '../config.json';
+import * as config from "../config.json";
 
 const { BASE_URL } = config;
 
-export const fetchPosts = () => {
-  return fetch(`${BASE_URL}posts`)
-    .then((response) => response.json())
-    .then((json) => json);
+const fetchJSON = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  return response.json();
 };
-export const fetchUsers = () => {
-  return fetch(`${BASE_URL}users`)
-    .then((response) => response.json())
-    .then((json) => json);
-};
-export const fetchPost = (id) => {
-  return fetch(`${BASE_URL}posts/${id}`)
-    .then((response) => response.json())
-    .then((json) => json);
-};
-export const fetchComments = (id) => {
-  return fetch(`${BASE_URL}posts/${id}/comments`)
-    .then((response) => response.json())
-    .then((json) => json);
-};
-export const fetchUser = (id) => {
-  return fetch(`${BASE_URL}users/${id}`)
-    .then((response) => response.json())
-    .then((json) => json);
-};
+
+export const fetchPosts = () => fetchJSON(`${BASE_URL}posts`);
+export const fetchUsers = () => fetchJSON(`${BASE_URL}users`);
+export const fetchPost = (id) => fetchJSON(`${BASE_URL}posts/${id}`);
+export const fetchComments = (id) => fetchJSON(`${BASE_URL}posts/${id}/comments`);
+export const fetchUser = (id) => fetchJSON(`${BASE_URL}users/${id}`);

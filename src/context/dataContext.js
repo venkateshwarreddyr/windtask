@@ -6,38 +6,40 @@ export const DataContext = createContext({
   loading: false,
   posts: [],
   users: [],
-  isUpdated: false,
-  setIsUpdated: () => {},
+  error: null,
 });
 
 const DataContextProvider = (props) => {
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
-  const [isUpdated, setIsUpdated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-      setLoading(true)
-      Promise.all([fetchPosts(), fetchUsers()])
-        .then(([posts, users]) => {
-          const postsDetails = posts.map((post) => {
-            const user = users.find((user) => user.id === post.userId);
-            post.userName = user.name;
-            return post;
-          });
-          setPosts(postsDetails);
-          setUsers(users);
-        }).finally(()=>setLoading(false))
-    }, []);
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    Promise.all([fetchPosts(), fetchUsers()])
+      .then(([postsData, usersData]) => {
+        const postsDetails = postsData.map((post) => {
+          const user = usersData.find((u) => u.id === post.userId);
+          return { ...post, userName: user ? user.name : "Unknown" };
+        });
+        setPosts(postsDetails);
+        setUsers(usersData);
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <DataContext.Provider value={{ posts, users, isUpdated, setIsUpdated, loading }}>
+    <DataContext.Provider value={{ posts, users, loading, error }}>
       {props.children}
     </DataContext.Provider>
   );
 };
+
 DataContextProvider.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.node,
 };
 
 export default DataContextProvider;
